@@ -11,9 +11,7 @@ public record WhileASTNode(ASTNode condition, ASTNode body) implements ASTNode {
 
     @Override
     public Object evaluate(ILocalContext context) throws InterruptedException {
-        if (context.getRoot().isMarkedForDeletion()) throw new InterruptedException("Context marked for deletion");
-
-        LocalContext newContext = new LocalContext(context);
+        LocalContext newContext = context.getOrCreateChild();
 
         if(condition instanceof ValueASTNode valueASTNode) {
             boolean condition = Evaluator.toBool(valueASTNode.evaluate(newContext));

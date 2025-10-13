@@ -78,8 +78,6 @@ public class FunctionCallASTNode implements ASTNode {
                 }
             }
 
-            LocalContext localContext = new LocalContext(context.getRoot());
-
             if (cachedFunction instanceof NativeFunction) {
                 // Cast argument types
                 if (cachedFunction.getParameterCount() != -1)
@@ -90,13 +88,13 @@ public class FunctionCallASTNode implements ASTNode {
                 Object result = cachedFunction.call(context, cachedEvaluatedArgs);
 
                 if (result instanceof Breakpoint breakpoint) {
-                    localContext.onRemove();
                     return breakpoint.getValue();
                 }
 
-                localContext.onRemove();
                 return result;
             }
+
+            LocalContext localContext = new LocalContext(context.getRoot());
 
             Object result = cachedFunction.call(localContext, cachedEvaluatedArgs);
 

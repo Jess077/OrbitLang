@@ -12,7 +12,7 @@ public record ConditionalASTNode(ASTNode condition, ASTNode thenBranch, ASTNode 
 
         Object condition = this.condition().evaluate(context);
 
-        LocalContext newContext = new LocalContext(context);
+        LocalContext newContext = context.getOrCreateChild();
         if (Evaluator.toBool(condition)) {
             Object result = this.thenBranch().evaluate(newContext);
 

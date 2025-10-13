@@ -18,10 +18,9 @@ public class LocalContext implements ILocalContext {
     protected ILocalContext parent;
     protected final GlobalContext root;
 
-    protected Int2ObjectOpenHashMap<Variable> variables = new Int2ObjectOpenHashMap<>();
+    protected LocalContext child;
 
-    // for prototyping, make an array map to store variables
-    protected Variable[] arrayVariables = new Variable[256];
+    protected Int2ObjectOpenHashMap<Variable> variables = new Int2ObjectOpenHashMap<>();
 
     public LocalContext(ILocalContext parent) {
         this.parent = parent;
@@ -92,6 +91,14 @@ public class LocalContext implements ILocalContext {
         this.parent = parent;
     }
 
+    public LocalContext getChild() {
+        return child;
+    }
+
+    public void setChild(LocalContext child) {
+        this.child = (LocalContext) child;
+    }
+
     @Override
     public GlobalContext getRoot() {
         return root;
@@ -105,5 +112,13 @@ public class LocalContext implements ILocalContext {
     @Override
     public void addFunction(IFunction function) {
         root.addFunction(function);
+    }
+
+    @Override
+    public LocalContext getOrCreateChild() {
+        if (child == null) {
+            child = new LocalContext(this);
+        }
+        return child;
     }
 }

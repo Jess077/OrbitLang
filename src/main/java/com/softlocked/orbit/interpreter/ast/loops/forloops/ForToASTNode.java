@@ -11,7 +11,7 @@ public record ForToASTNode(ASTNode init, ASTNode end, ASTNode body) implements A
     public Object evaluate(ILocalContext context) throws InterruptedException {
         if (context.getRoot().isMarkedForDeletion()) throw new InterruptedException("Context marked for deletion");
 
-        LocalContext forContext = new LocalContext(context);
+        LocalContext forContext = context.getOrCreateChild();
 
         Variable variable = (Variable) this.init().evaluate(forContext);
 

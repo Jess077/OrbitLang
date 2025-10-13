@@ -158,11 +158,18 @@ public class Math_Library implements OrbitJavaLibrary {
             }
         });
 
-        context.addFunction(new NativeFunction("math.max", List.of(Variable.Type.DOUBLE, Variable.Type.DOUBLE), Variable.Type.DOUBLE) {
+        context.addFunction(new NativeFunction("math.max", List.of(Variable.Type.ANY, Variable.Type.ANY), Variable.Type.DOUBLE) {
             @Override
             public Object call(ILocalContext context, List<Object> args) {
-                return Math.max((double) args.get(0), (double) args.get(1));
+                Object value = args.get(0);
+                Object value2 = args.get(1);
+                return Math.max(((Number)value).doubleValue(), ((Number)value2).doubleValue());
             }
+
+//            @Override
+//            public <T extends BFunction> Class<T> getBakedFunction() {
+//                return (Class<T>) BFunction_Max.class;
+//            }
         });
 
         context.addFunction(new NativeFunction("math.min", List.of(Variable.Type.DOUBLE, Variable.Type.DOUBLE), Variable.Type.DOUBLE) {

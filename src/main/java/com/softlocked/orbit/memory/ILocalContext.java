@@ -28,9 +28,15 @@ public interface ILocalContext {
 
     void setParent(ILocalContext parent);
 
+    LocalContext getChild();
+
+    void setChild(LocalContext child);
+
     GlobalContext getRoot();
 
     IFunction getFunction(String name, int parameterCount);
 
     void addFunction(IFunction function);
+
+    LocalContext getOrCreateChild();
 }

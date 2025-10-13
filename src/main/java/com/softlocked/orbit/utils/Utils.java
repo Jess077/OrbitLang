@@ -283,16 +283,24 @@ public class Utils {
                 return original.toString();
             }
         } else if(target.equals(Short.class)) {
-            if(original instanceof String) {
-                return Short.parseShort((String) original);
-            } else if(original instanceof Character) {
-                return (short) (char) original;
-            } else if(original instanceof Boolean) {
-                return (boolean) original ? (short) 1 : (short) 0;
-            } else if(original instanceof Number) {
-                return ((Number) original).shortValue();
-            } else if(original instanceof OrbitObject b) {
-                return b.callFunction("cast", List.of("short"));
+            switch (original) {
+                case String s -> {
+                    return Short.parseShort(s);
+                }
+                case Character c -> {
+                    return (short) (char) original;
+                }
+                case Boolean aBoolean -> {
+                    return (boolean) original ? (short) 1 : (short) 0;
+                }
+                case Number number -> {
+                    return number.shortValue();
+                }
+                case OrbitObject b -> {
+                    return b.callFunction("cast", List.of("short"));
+                }
+                default -> {
+                }
             }
         }
 
