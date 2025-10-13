@@ -22,6 +22,8 @@ public class NativeFunction implements IFunction {
 
     private final List<Variable.Type> args = new ArrayList<>();
 
+    List<Pair<String, Variable.Type>> cachedParams = null;
+
     public NativeFunction(String name, int argsCount, Variable.Type returnType) {
         this.name = name;
         this.argsCount = argsCount;
@@ -30,6 +32,12 @@ public class NativeFunction implements IFunction {
         for (int i = 0; i < argsCount; i++) {
             args.add(Variable.Type.ANY);
         }
+
+        cachedParams = new ArrayList<>();
+
+        for (int i = 0; i < args.size(); i++) {
+            cachedParams.add(new Pair<>("arg" + i, args.get(i)));
+        }
     }
 
     public NativeFunction(String name, List<Variable.Type> args, Variable.Type returnType) {
@@ -37,6 +45,12 @@ public class NativeFunction implements IFunction {
         this.argsCount = args.size();
         this.returnType = returnType;
         this.args.addAll(args);
+
+        cachedParams = new ArrayList<>();
+
+        for (int i = 0; i < args.size(); i++) {
+            cachedParams.add(new Pair<>("arg" + i, args.get(i)));
+        }
     }
 
     @Override
@@ -56,13 +70,7 @@ public class NativeFunction implements IFunction {
 
     @Override
     public List<Pair<String, Variable.Type>> getParameters() {
-        List<Pair<String, Variable.Type>> pairs = new ArrayList<>();
-
-        for (int i = 0; i < args.size(); i++) {
-            pairs.add(new Pair<>("arg" + i, args.get(i)));
-        }
-
-        return pairs;
+        return cachedParams;
     }
 
     @Override

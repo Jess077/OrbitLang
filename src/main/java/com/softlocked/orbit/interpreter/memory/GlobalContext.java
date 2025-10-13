@@ -25,6 +25,7 @@ import com.softlocked.orbit.parser.Parser;
 import com.softlocked.orbit.utils.Pair;
 import com.softlocked.orbit.interpreter.ast.generic.BodyASTNode;
 import com.softlocked.orbit.interpreter.ast.generic.ImportASTNode;
+import com.softlocked.orbit.utils.list.CacheList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import java.io.File;
@@ -66,6 +67,32 @@ public class GlobalContext extends LocalContext {
 
     public void markForDeletion() {
         markedForDeletion.set(true);
+    }
+
+    private final HashMap<IFunction, CacheList<LocalContext>> functionContexts = new HashMap<>();
+
+    public LocalContext getOrCreateFunctionContext(IFunction function) {
+        CacheList<LocalContext> contexts = functionContexts.get(function);
+
+        if(contexts == null) {
+            contexts = new CacheList<>();
+            functionContexts.put(function, contexts);
+        }
+
+        if(contexts.realSize() > contexts.size()) {
+            return contexts.getNext();
+        }
+        LocalContext context = new LocalContext(this);
+        contexts.addNext(context);
+        return context;
+    }
+
+    public void freeFunctionContext(IFunction function) {
+        CacheList<LocalContext> contexts = functionContexts.get(function);
+
+        if(contexts != null) {
+            contexts.move(-1);
+        }
     }
 
     public void markForDeletion(boolean forceExit) {

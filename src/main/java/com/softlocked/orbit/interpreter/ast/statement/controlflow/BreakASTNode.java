@@ -2,8 +2,11 @@ package com.softlocked.orbit.interpreter.ast.statement.controlflow;
 
 import com.softlocked.orbit.core.ast.ASTNode;
 import com.softlocked.orbit.core.datatypes.classes.OrbitObject;
+import com.softlocked.orbit.core.datatypes.functions.IFunction;
 import com.softlocked.orbit.core.evaluator.Breakpoint;
 import com.softlocked.orbit.core.exception.InternalException;
+import com.softlocked.orbit.interpreter.ast.operation.OperationASTNode;
+import com.softlocked.orbit.interpreter.ast.variable.FunctionCallASTNode;
 import com.softlocked.orbit.memory.ILocalContext;
 
 public class BreakASTNode implements ASTNode {
@@ -33,6 +36,28 @@ public class BreakASTNode implements ASTNode {
             throw new InternalException(exception);
         }
 
+        // partial TCO
+        if (type == Breakpoint.Type.RETURN) {
+            if(value instanceof FunctionCallASTNode funcCall) {
+                IFunction func = funcCall.getCachedFunction(context);
+
+                context.getRoot().freeFunctionContext(func);
+
+                return funcCall.evaluate(context);
+            }
+//            if(value instanceof OperationASTNode op) {
+//                FunctionCallASTNode funcCall = findTailCall(op);
+//                if(funcCall != null) {
+//                    System.out.println("Optimizing tail call for function: " + funcCall);
+//                    IFunction func = funcCall.getCachedFunction(context);
+//
+//                    context.getRoot().freeFunctionContext(func);
+//
+//                    return funcCall.evaluate(context);
+//                }
+//            }
+        }
+
         // Evaluate value if not null
         Object evaluatedValue = value != null ? value.evaluate(context) : null;
 
@@ -45,6 +70,23 @@ public class BreakASTNode implements ASTNode {
         }
 
         return cachedBreakpoint;
+    }
+
+    public static FunctionCallASTNode findTailCall(ASTNode node) {
+        if (node instanceof FunctionCallASTNode funcCall) {
+            return funcCall;
+        } else if (node instanceof OperationASTNode op) {
+            // Search right subtree
+            FunctionCallASTNode rightResult = findTailCall(op.right());
+            if (rightResult != null) {
+                return rightResult;
+            }
+
+            // Search left subtree
+            return findTailCall(op.left());
+        }
+        // Not a function call or operation
+        return null;
     }
 
     @Override

@@ -15,15 +15,17 @@ import java.util.List;
 public class Main {
     private final static String code = """
     print("Starting!")
-    long start = time()
-    var sum = 0
-    for (i to 100000) {
-        for (j to 100) {
-            sum += (i * j) / math.max(i - j + 1, 1)
+    fun fibonacci(n) {
+        if (n <= 1) {
+            return n;
         }
+        return fibonacci(n - 1) + fibonacci(n - 2)
     }
+    long start = time()
+    // Calculate fibonacci of 35
+    int result = fibonacci(35)
+    print("Fibonacci of 35 is " + result)
     long end = time()
-    print("Sum: " + sum)
     print("Orbit Execution took " + (end - start) + " milliseconds")
     """;
 
@@ -38,7 +40,7 @@ public class Main {
         String luaCode = """
             local math = math
                     local os = os
-                
+            
                     local A = 0.0
                       
         """;

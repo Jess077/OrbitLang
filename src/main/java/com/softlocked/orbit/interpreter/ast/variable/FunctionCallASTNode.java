@@ -4,6 +4,7 @@ import com.softlocked.orbit.core.ast.ASTNode;
 import com.softlocked.orbit.core.datatypes.Variable;
 import com.softlocked.orbit.core.datatypes.functions.IFunction;
 import com.softlocked.orbit.core.evaluator.Breakpoint;
+import com.softlocked.orbit.interpreter.ast.value.ValueASTNode;
 import com.softlocked.orbit.interpreter.function.Consumer;
 import com.softlocked.orbit.interpreter.function.NativeFunction;
 import com.softlocked.orbit.memory.ILocalContext;
@@ -22,9 +23,19 @@ public class FunctionCallASTNode implements ASTNode {
     private IFunction cachedFunction;
     private List<Object> cachedEvaluatedArgs;
 
+    private boolean hasParams = false;
+
     public IFunction getCachedFunction(ILocalContext context) {
         if (cachedFunction == null) {
             cachedFunction = context.getFunction(name, args.size());
+
+            if (cachedFunction == null) {
+                throw new RuntimeException("Function " + name + " with " + args.size() + " arguments not found");
+            }
+            cachedEvaluatedArgs = new ArrayList<>(args.size());
+            for (int i = 0; i < args.size(); i++) {
+                cachedEvaluatedArgs.add(null);
+            }
         }
 
         return cachedFunction;
@@ -43,71 +54,70 @@ public class FunctionCallASTNode implements ASTNode {
 
     @Override
     public Object evaluate(ILocalContext context) throws InterruptedException {
-        try {
-            // Caching
+        // Caching
+        if (cachedFunction == null) {
+            cachedFunction = context.getFunction(name, args.size());
+
             if (cachedFunction == null) {
-                cachedFunction = context.getFunction(name, args.size());
-
-                if (cachedFunction == null) {
-                    throw new RuntimeException("Function " + name + " with " + args.size() + " arguments not found");
-                }
-                cachedEvaluatedArgs = new ArrayList<>(args.size());
-                for (int i = 0; i < args.size(); i++) {
-                    cachedEvaluatedArgs.add(null);
-                }
+                throw new RuntimeException("Function " + name + " with " + args.size() + " arguments not found");
             }
+            cachedEvaluatedArgs = new ArrayList<>(args.size());
+            for (int i = 0; i < args.size(); i++) {
+                cachedEvaluatedArgs.add(null);
+            }
+        }
 
-            if (cachedFunction.getParameterCount() != -1) {
-                List<Pair<String, Variable.Type>> parameters = cachedFunction.getParameters();
+        if (cachedFunction.getParameterCount() != -1) {
+            List<Pair<String, Variable.Type>> parameters = cachedFunction.getParameters();
 
-                for (int i = 0; i < args.size(); i++) {
-                    ASTNode arg = args.get(i);
+            for (int i = 0; i < args.size(); i++) {
+                ASTNode arg = args.get(i);
 
-                    Variable.Type type = parameters.get(i).second;
+                Variable.Type type = parameters.get(i).second;
 
-                    if(type == Variable.Type.CONSUMER) {
-                        cachedEvaluatedArgs.set(i, new Consumer(arg));
-                    } else {
-                        cachedEvaluatedArgs.set(i, arg.evaluate(context));
-                    }
-                }
-            } else {
-                for (int i = 0; i < args.size(); i++) {
-                    ASTNode arg = args.get(i);
+                if(type == Variable.Type.CONSUMER) {
+                    cachedEvaluatedArgs.set(i, new Consumer(arg));
+                } else {
                     cachedEvaluatedArgs.set(i, arg.evaluate(context));
                 }
             }
+        } else {
+            for (int i = 0; i < args.size(); i++) {
+                ASTNode arg = args.get(i);
+                cachedEvaluatedArgs.set(i, arg.evaluate(context));
+            }
+        }
 
-            if (cachedFunction instanceof NativeFunction) {
-                // Cast argument types
-                if (cachedFunction.getParameterCount() != -1)
-                    for (int i = 0; i < cachedEvaluatedArgs.size(); i++) {
-                        cachedEvaluatedArgs.set(i, Utils.cast(cachedEvaluatedArgs.get(i), cachedFunction.getParameters().get(i).second.getJavaClass()));
-                    }
-
-                Object result = cachedFunction.call(context, cachedEvaluatedArgs);
-
-                if (result instanceof Breakpoint breakpoint) {
-                    return breakpoint.getValue();
+        if (cachedFunction instanceof NativeFunction) {
+            // Cast argument types
+            if (cachedFunction.getParameterCount() != -1) {
+                for (int i = 0; i < cachedEvaluatedArgs.size(); i++) {
+                    cachedEvaluatedArgs.set(i, Utils.cast(cachedEvaluatedArgs.get(i), cachedFunction.getParameters().get(i).second.getJavaClass()));
                 }
-
-                return result;
             }
 
-            LocalContext localContext = new LocalContext(context.getRoot());
-
-            Object result = cachedFunction.call(localContext, cachedEvaluatedArgs);
+            Object result = cachedFunction.call(context, cachedEvaluatedArgs);
 
             if (result instanceof Breakpoint breakpoint) {
-                localContext.onRemove();
                 return breakpoint.getValue();
             }
 
-            localContext.onRemove();
             return result;
-        } catch (Error | Exception e) {
-            throw e;    
         }
+
+        LocalContext localContext = context.getRoot().getOrCreateFunctionContext(cachedFunction);
+
+        Object result = cachedFunction.call(localContext, cachedEvaluatedArgs);
+
+        context.getRoot().freeFunctionContext(cachedFunction);
+
+        if (result instanceof Breakpoint breakpoint) {
+            localContext.onRemove();
+            return breakpoint.getValue();
+        }
+
+        localContext.onRemove();
+        return result;
     }
 
     public String name() {
