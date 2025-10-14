@@ -6,7 +6,6 @@ import com.softlocked.orbit.interpreter.memory.GlobalContext;
 import com.softlocked.orbit.lexer.Lexer;
 import com.softlocked.orbit.parser.Parser;
 import org.luaj.vm2.Globals;
-import org.luaj.vm2.Lua;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
 

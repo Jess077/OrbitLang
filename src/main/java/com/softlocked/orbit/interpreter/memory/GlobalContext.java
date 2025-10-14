@@ -19,12 +19,8 @@ import com.softlocked.orbit.libraries.*;
 import com.softlocked.orbit.libraries.Math.Math_Library;
 import com.softlocked.orbit.memory.ILocalContext;
 import com.softlocked.orbit.memory.LocalContext;
-import com.softlocked.orbit.opm.ast.pkg.ImportFileASTNode;
-import com.softlocked.orbit.opm.ast.pkg.ImportModuleASTNode;
 import com.softlocked.orbit.parser.Parser;
 import com.softlocked.orbit.utils.Pair;
-import com.softlocked.orbit.interpreter.ast.generic.BodyASTNode;
-import com.softlocked.orbit.interpreter.ast.generic.ImportASTNode;
 import com.softlocked.orbit.utils.list.CacheList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 

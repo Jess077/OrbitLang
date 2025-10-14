@@ -1,18 +1,9 @@
 package com.softlocked.orbit.opm.ast.pkg;
 
-import com.softlocked.orbit.core.ast.ASTNode;
 import com.softlocked.orbit.core.datatypes.Variable;
 import com.softlocked.orbit.interpreter.ast.generic.ImportASTNode;
 import com.softlocked.orbit.interpreter.memory.GlobalContext;
-import com.softlocked.orbit.lexer.Lexer;
 import com.softlocked.orbit.memory.ILocalContext;
-import com.softlocked.orbit.opm.packager.OrbitPackage;
-import com.softlocked.orbit.parser.Parser;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 public record ImportModuleASTNode(String moduleName) implements ImportASTNode {
     @Override
