@@ -14,7 +14,7 @@ public class Time_Library implements OrbitJavaLibrary {
         // time
         context.addFunction(new NativeFunction("time", 0, Variable.Type.LONG) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 return System.currentTimeMillis();
             }
         });
@@ -22,7 +22,7 @@ public class Time_Library implements OrbitJavaLibrary {
         // nanoTime
         context.addFunction(new NativeFunction("nanoTime", 0, Variable.Type.LONG) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 return System.nanoTime();
             }
         });
@@ -30,9 +30,9 @@ public class Time_Library implements OrbitJavaLibrary {
         // sleep
         context.addFunction(new NativeFunction("sleep", List.of(Variable.Type.LONG), Variable.Type.VOID) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 try {
-                    Thread.sleep((long) args.get(0));
+                    Thread.sleep((long) args[0]);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

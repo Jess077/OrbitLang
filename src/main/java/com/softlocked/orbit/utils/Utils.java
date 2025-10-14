@@ -6,8 +6,6 @@ import com.softlocked.orbit.core.datatypes.Variable;
 import com.softlocked.orbit.core.datatypes.classes.OrbitObject;
 import com.softlocked.orbit.core.evaluator.Evaluator;
 import com.softlocked.orbit.core.exception.ParsingException;
-import com.softlocked.orbit.interpreter.function.Consumer;
-import com.softlocked.orbit.interpreter.function.coroutine.Coroutine;
 import com.softlocked.orbit.lexer.Lexer;
 import com.softlocked.orbit.memory.ILocalContext;
 import com.softlocked.orbit.parser.Parser;

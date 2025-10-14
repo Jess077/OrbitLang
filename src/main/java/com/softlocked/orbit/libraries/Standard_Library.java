@@ -20,7 +20,7 @@ public class Standard_Library implements OrbitJavaLibrary {
         // print
         context.addFunction(new NativeFunction("print", -1, Variable.Type.VOID) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 StringJoiner joiner = new StringJoiner(" ");
 
                 try {
@@ -40,7 +40,7 @@ public class Standard_Library implements OrbitJavaLibrary {
         // printn (print without newline)
         context.addFunction(new NativeFunction("printn", -1, Variable.Type.VOID) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 StringJoiner joiner = new StringJoiner(" ");
 
                 try {
@@ -60,8 +60,8 @@ public class Standard_Library implements OrbitJavaLibrary {
         // typeof
         context.addFunction(new NativeFunction("typeof", 1, Variable.Type.STRING) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                Object obj = args.get(0);
+            public Object call(ILocalContext context, Object[] args) {
+                Object obj = args[0];
 
                 if(obj == null) {
                     return "null";
@@ -74,17 +74,17 @@ public class Standard_Library implements OrbitJavaLibrary {
         // isNull
         context.addFunction(new NativeFunction("isNull", 1, Variable.Type.BOOL) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                return args.get(0) == null;
+            public Object call(ILocalContext context, Object[] args) {
+                return args[0] == null;
             }
         });
 
         // toString
         context.addFunction(new NativeFunction("toString", 1, Variable.Type.STRING) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 try {
-                    return Utils.cast(args.get(0), String.class);
+                    return Utils.cast(args[0], String.class);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -94,9 +94,9 @@ public class Standard_Library implements OrbitJavaLibrary {
         // toInt
         context.addFunction(new NativeFunction("toInt", 1, Variable.Type.INT) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 try {
-                    return Utils.cast(args.get(0), Integer.class);
+                    return Utils.cast(args[0], Integer.class);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -106,9 +106,9 @@ public class Standard_Library implements OrbitJavaLibrary {
         // toFloat
         context.addFunction(new NativeFunction("toFloat", 1, Variable.Type.FLOAT) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 try {
-                    return Utils.cast(args.get(0), Float.class);
+                    return Utils.cast(args[0], Float.class);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -118,9 +118,9 @@ public class Standard_Library implements OrbitJavaLibrary {
         // toDouble
         context.addFunction(new NativeFunction("toDouble", 1, Variable.Type.DOUBLE) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 try {
-                    return Utils.cast(args.get(0), Double.class);
+                    return Utils.cast(args[0], Double.class);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -130,9 +130,9 @@ public class Standard_Library implements OrbitJavaLibrary {
         // toLong
         context.addFunction(new NativeFunction("toLong", 1, Variable.Type.LONG) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 try {
-                    return Utils.cast(args.get(0), Long.class);
+                    return Utils.cast(args[0], Long.class);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -142,9 +142,9 @@ public class Standard_Library implements OrbitJavaLibrary {
         // toByte
         context.addFunction(new NativeFunction("toByte", 1, Variable.Type.BYTE) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 try {
-                    return Utils.cast(args.get(0), Byte.class);
+                    return Utils.cast(args[0], Byte.class);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -154,9 +154,9 @@ public class Standard_Library implements OrbitJavaLibrary {
         // toShort
         context.addFunction(new NativeFunction("toShort", 1, Variable.Type.SHORT) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 try {
-                    return Utils.cast(args.get(0), Short.class);
+                    return Utils.cast(args[0], Short.class);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -166,9 +166,9 @@ public class Standard_Library implements OrbitJavaLibrary {
         // toChar
         context.addFunction(new NativeFunction("toChar", 1, Variable.Type.CHAR) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 try {
-                    return Utils.cast(args.get(0), Character.class);
+                    return Utils.cast(args[0], Character.class);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -178,9 +178,9 @@ public class Standard_Library implements OrbitJavaLibrary {
         // toBool
         context.addFunction(new NativeFunction("toBool", 1, Variable.Type.BOOL) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 try {
-                    return Utils.cast(args.get(0), Boolean.class);
+                    return Utils.cast(args[0], Boolean.class);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -190,7 +190,7 @@ public class Standard_Library implements OrbitJavaLibrary {
         // exit()
         context.addFunction(new NativeFunction("exit", 0, Variable.Type.VOID) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 context.getRoot().markForDeletion(true);
                 return null;
             }

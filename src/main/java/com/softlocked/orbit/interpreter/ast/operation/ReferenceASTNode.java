@@ -43,7 +43,7 @@ public record ReferenceASTNode(ASTNode param, ASTNode function) implements ASTNo
                 List<Object> args = new ArrayList<>();
                 for (int i = 0; i < functionCall.args().size(); i++) {
                     ASTNode arg = functionCall.args().get(i);
-                    Variable.Type type1 = fun.getParameters().get(i).second;
+                    Variable.Type type1 = fun.getParameters()[i].second;
 
                     if(type1 == Variable.Type.CONSUMER) {
                         args.add(new Consumer(arg));

@@ -17,9 +17,9 @@ public class Coroutine_Library implements OrbitJavaLibrary {
     public void load(GlobalContext context) {
         context.addFunction(new NativeFunction("coroutine.resume", List.of(Variable.Type.COROUTINE), Variable.Type.ANY) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 try {
-                    return ((Coroutine) args.get(0)).resume();
+                    return ((Coroutine) args[0]).resume();
                 } catch (InterruptedException e) {
                     return null;
                 }
@@ -28,26 +28,26 @@ public class Coroutine_Library implements OrbitJavaLibrary {
 
         context.addFunction(new NativeFunction("coroutine.isFinished", List.of(Variable.Type.COROUTINE), Variable.Type.BOOL) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                return ((Coroutine) args.get(0)).isFinished();
+            public Object call(ILocalContext context, Object[] args) {
+                return ((Coroutine) args[0]).isFinished();
             }
         });
 
         context.addFunction(new NativeFunction("coroutine.hasNext", List.of(Variable.Type.COROUTINE), Variable.Type.BOOL) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                return !((Coroutine) args.get(0)).isFinished();
+            public Object call(ILocalContext context, Object[] args) {
+                return !((Coroutine) args[0]).isFinished();
             }
         });
 
         context.addFunction(new NativeFunction("coroutine.clone", List.of(Variable.Type.COROUTINE), Variable.Type.COROUTINE) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 LocalContext newContext = new LocalContext(context.getRoot());
-                Coroutine coroutine = (Coroutine) args.get(0);
+                Coroutine coroutine = (Coroutine) args[0];
 
                 try {
-                    return coroutine.getFunction().call(newContext, coroutine.getArgs());
+                    return coroutine.getFunction().call(newContext, coroutine.getArgs().toArray());
                 } catch (InterruptedException e) {
                     return null;
                 }
@@ -56,8 +56,8 @@ public class Coroutine_Library implements OrbitJavaLibrary {
 
         context.addFunction(new NativeFunction("coroutine.iterator", List.of(Variable.Type.COROUTINE), Variable.Type.LIST) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                Coroutine coroutine = (Coroutine) args.get(0);
+            public Object call(ILocalContext context, Object[] args) {
+                Coroutine coroutine = (Coroutine) args[0];
 
                 return new CoroutineList(coroutine);
             }
@@ -65,10 +65,10 @@ public class Coroutine_Library implements OrbitJavaLibrary {
 
         context.addFunction(new NativeFunction("coroutine.then", List.of(Variable.Type.COROUTINE, Variable.Type.CONSUMER), Variable.Type.VOID) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                Coroutine coroutine = (Coroutine) args.get(0);
+            public Object call(ILocalContext context, Object[] args) {
+                Coroutine coroutine = (Coroutine) args[0];
 
-                Consumer consumer = (Consumer) args.get(1);
+                Consumer consumer = (Consumer) args[1];
 
                 coroutine.addConsumer(consumer);
 
@@ -79,8 +79,8 @@ public class Coroutine_Library implements OrbitJavaLibrary {
         // Async
 //        context.addFunction(new NativeFunction("coroutine.async", List.of(Variable.Type.COROUTINE), Variable.Type.ANY) {
 //            @Override
-//            public Object call(ILocalContext context, List<Object> args) {
-//                Coroutine coroutine = (Coroutine) args.get(0);
+//            public Object call(ILocalContext context, Object[] args) {
+//                Coroutine coroutine = (Coroutine) args[0];
 //
 //                coroutine.setAsync(true);
 //
@@ -101,8 +101,8 @@ public class Coroutine_Library implements OrbitJavaLibrary {
         // Await
         context.addFunction(new NativeFunction("coroutine.await", List.of(Variable.Type.COROUTINE), Variable.Type.ANY) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                Coroutine coroutine = (Coroutine) args.get(0);
+            public Object call(ILocalContext context, Object[] args) {
+                Coroutine coroutine = (Coroutine) args[0];
 
                 while (coroutine.getReturnValue() == null) {
                     try {

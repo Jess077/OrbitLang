@@ -29,7 +29,7 @@ public class CoroutineList extends AbstractList<Object> {
         }
 
         try {
-            coroutine = (Coroutine) coroutine.getFunction().call(coroutine.getContext(), coroutine.getArgs());
+            coroutine = (Coroutine) coroutine.getFunction().call(coroutine.getContext(), coroutine.getArgs().toArray());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -56,7 +56,7 @@ public class CoroutineList extends AbstractList<Object> {
         }
 
         try {
-            coroutine = (Coroutine) coroutine.getFunction().call(coroutine.getContext(), coroutine.getArgs());
+            coroutine = (Coroutine) coroutine.getFunction().call(coroutine.getContext(), coroutine.getArgs().toArray());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -82,7 +82,7 @@ public class CoroutineList extends AbstractList<Object> {
         } while (!coroutine.isFinished() && !value.equals(o));
 
         try {
-            coroutine = (Coroutine) coroutine.getFunction().call(coroutine.getContext(), coroutine.getArgs());
+            coroutine = (Coroutine) coroutine.getFunction().call(coroutine.getContext(), coroutine.getArgs().toArray());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -99,7 +99,7 @@ public class CoroutineList extends AbstractList<Object> {
 
                 if (finished) {
                     try {
-                        coroutine = (Coroutine) coroutine.getFunction().call(coroutine.getContext(), coroutine.getArgs());
+                        coroutine = (Coroutine) coroutine.getFunction().call(coroutine.getContext(), coroutine.getArgs().toArray());
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }

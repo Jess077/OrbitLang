@@ -120,7 +120,7 @@ public class Coroutine {
                     returnValue = new AtomicReference<>(breakpoint.getValue());
                 }
                 for (Consumer consumer : consumers) {
-                    consumer.accept(context, List.of(breakpoint.getValue()));
+                    consumer.accept(context, new Object[]{breakpoint.getValue()});
                 }
                 return breakpoint.getValue();
             }
@@ -178,7 +178,7 @@ public class Coroutine {
                         returnValue = new AtomicReference<>(breakpoint.getValue());
                     }
                     for (Consumer consumer : consumers) {
-                        consumer.accept(context, List.of(breakpoint.getValue()));
+                        consumer.accept(context, new Object[]{breakpoint.getValue()});
                     }
                     return breakpoint.getValue();
                 }
@@ -214,7 +214,7 @@ public class Coroutine {
                         returnValue = new AtomicReference<>(breakpoint.getValue());
                     }
                     for (Consumer consumer : consumers) {
-                        consumer.accept(context, List.of(breakpoint.getValue()));
+                        consumer.accept(context, new Object[]{breakpoint.getValue()});
                     }
                     return breakpoint.getValue();
                 }
@@ -261,7 +261,7 @@ public class Coroutine {
                 returnValue = new AtomicReference<>(breakpoint.getValue());
             }
             for (Consumer consumer : consumers) {
-                consumer.accept(context, List.of(breakpoint.getValue()));
+                consumer.accept(context, new Object[]{breakpoint.getValue()});
             }
             return breakpoint.getValue();
         }

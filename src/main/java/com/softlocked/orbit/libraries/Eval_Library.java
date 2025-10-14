@@ -17,8 +17,8 @@ public class Eval_Library implements OrbitJavaLibrary {
         // Function for deleting functions
         context.addFunction(new NativeFunction("unload", List.of(Variable.Type.STRING, Variable.Type.INT), Variable.Type.VOID) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                context.getRoot().removeFunction((String) args.get(0), (int) args.get(1));
+            public Object call(ILocalContext context, Object[] args) {
+                context.getRoot().removeFunction((String) args[0], (int) args[1]);
 
                 return null;
             }
@@ -27,8 +27,8 @@ public class Eval_Library implements OrbitJavaLibrary {
         // Function for deleting classes
         context.addFunction(new NativeFunction("unload", List.of(Variable.Type.STRING), Variable.Type.VOID) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                context.getRoot().removeClass((String) args.get(0));
+            public Object call(ILocalContext context, Object[] args) {
+                context.getRoot().removeClass((String) args[0]);
 
                 return null;
             }
@@ -37,8 +37,8 @@ public class Eval_Library implements OrbitJavaLibrary {
         // eval function
         context.addFunction(new NativeFunction("eval", List.of(Variable.Type.STRING), Variable.Type.VOID) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                String code = (String) args.get(0);
+            public Object call(ILocalContext context, Object[] args) {
+                String code = (String) args[0];
 
                 try {
                     List<String> tokens = new Lexer(code).tokenize();

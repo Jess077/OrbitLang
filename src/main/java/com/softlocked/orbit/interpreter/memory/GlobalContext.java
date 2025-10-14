@@ -19,12 +19,8 @@ import com.softlocked.orbit.libraries.*;
 import com.softlocked.orbit.libraries.Math.Math_Library;
 import com.softlocked.orbit.memory.ILocalContext;
 import com.softlocked.orbit.memory.LocalContext;
-import com.softlocked.orbit.opm.ast.pkg.ImportFileASTNode;
-import com.softlocked.orbit.opm.ast.pkg.ImportModuleASTNode;
 import com.softlocked.orbit.parser.Parser;
 import com.softlocked.orbit.utils.Pair;
-import com.softlocked.orbit.interpreter.ast.generic.BodyASTNode;
-import com.softlocked.orbit.interpreter.ast.generic.ImportASTNode;
 import com.softlocked.orbit.utils.list.CacheList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
@@ -224,7 +220,7 @@ public class GlobalContext extends LocalContext {
             addFunction(
                     new NativeFunction(orbitClass.name(), 0, Variable.Type.CLASS) {
                         @Override
-                        public Object call(ILocalContext context, List<Object> args) {
+                        public Object call(ILocalContext context, Object[] args) {
                             try {
                                 return new OrbitObject(orbitClass, null, context.getRoot());
                             } catch (InterruptedException e) {
@@ -239,9 +235,9 @@ public class GlobalContext extends LocalContext {
                         new Pair<>(orbitClass.name(), entry.getKey()),
                         new NativeFunction(orbitClass.name(), entry.getKey(), Variable.Type.CLASS) {
                             @Override
-                            public Object call(ILocalContext context, List<Object> args) {
+                            public Object call(ILocalContext context, Object[] args) {
                                 try {
-                                    return new OrbitObject(orbitClass, args, context.getRoot());
+                                    return new OrbitObject(orbitClass, List.of(args), context.getRoot());
                                 } catch (InterruptedException e) {
                                     return null;
                                 }
@@ -264,7 +260,7 @@ public class GlobalContext extends LocalContext {
                     new HashMap<>(Map.of(
                             new Pair<>("getMessage", 0), new NativeFunction("getMessage", 0, Variable.Type.STRING) {
                                 @Override
-                                public Object call(ILocalContext context, List<Object> args) {
+                                public Object call(ILocalContext context, Object[] args) {
                                     return context.getVariable("message".hashCode()).getValue();
                                 }
                             }

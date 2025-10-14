@@ -17,63 +17,63 @@ public class Input_Library implements OrbitJavaLibrary {
         // TODO: replace with mc input
         context.addFunction(new NativeFunction("input.getLine", 0, Variable.Type.STRING) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 return scanner.nextLine();
             }
         });
 
         context.addFunction(new NativeFunction("input.get", 0, Variable.Type.STRING) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 return scanner.next();
             }
         });
 
         context.addFunction(new NativeFunction("input.getInt", 0, Variable.Type.INT) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 return scanner.nextInt();
             }
         });
 
         context.addFunction(new NativeFunction("input.getDouble", 0, Variable.Type.DOUBLE) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 return scanner.nextDouble();
             }
         });
 
         context.addFunction(new NativeFunction("input.getBoolean", 0, Variable.Type.BOOL) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 return scanner.nextBoolean();
             }
         });
 
         context.addFunction(new NativeFunction("input.getByte", 0, Variable.Type.BYTE) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 return scanner.nextByte();
             }
         });
 
         context.addFunction(new NativeFunction("input.getShort", 0, Variable.Type.SHORT) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 return scanner.nextShort();
             }
         });
 
         context.addFunction(new NativeFunction("input.getLong", 0, Variable.Type.LONG) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 return scanner.nextLong();
             }
         });
 
         context.addFunction(new NativeFunction("input.getFloat", 0, Variable.Type.FLOAT) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
+            public Object call(ILocalContext context, Object[] args) {
                 return scanner.nextFloat();
             }
         });

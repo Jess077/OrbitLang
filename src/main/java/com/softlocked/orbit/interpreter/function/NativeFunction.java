@@ -22,7 +22,11 @@ public class NativeFunction implements IFunction {
 
     private final List<Variable.Type> args = new ArrayList<>();
 
+<<<<<<< HEAD
     Pair<Integer, Variable.Type>[] cachedParams;
+=======
+    Pair<String, Variable.Type>[] cachedParams;
+>>>>>>> pr/1
 
     public NativeFunction(String name, int argsCount, Variable.Type returnType) {
         this.name = name;
@@ -33,10 +37,18 @@ public class NativeFunction implements IFunction {
             args.add(Variable.Type.ANY);
         }
 
+<<<<<<< HEAD
         cachedParams = new Pair[argsCount];
 
         for (int i = 0; i < args.size(); i++) {
             cachedParams[i] = new Pair<>(("arg" + i).hashCode(), args.get(i));
+=======
+        if (argsCount < 0) return;
+        cachedParams = new Pair[argsCount];
+
+        for (int i = 0; i < args.size(); i++) {
+            cachedParams[i] = new Pair<>("arg" + i, args.get(i));
+>>>>>>> pr/1
         }
     }
 
@@ -49,7 +61,11 @@ public class NativeFunction implements IFunction {
         cachedParams = new Pair[argsCount];
 
         for (int i = 0; i < args.size(); i++) {
+<<<<<<< HEAD
             cachedParams[i] = new Pair<>(("arg" + i).hashCode(), args.get(i));
+=======
+            cachedParams[i] = new Pair<>("arg" + i, args.get(i));
+>>>>>>> pr/1
         }
     }
 
@@ -69,7 +85,11 @@ public class NativeFunction implements IFunction {
     }
 
     @Override
+<<<<<<< HEAD
     public Pair<Integer, Variable.Type>[] getParameters() {
+=======
+    public Pair<String, Variable.Type>[] getParameters() {
+>>>>>>> pr/1
         return cachedParams;
     }
 
