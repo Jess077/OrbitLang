@@ -14,16 +14,21 @@ import java.util.List;
 public class Main {
     private final static String code = """
     print("Starting!")
-    fun fibonacci(n) {
-        if (n <= 1) {
-            return n;
-        }
-        return fibonacci(n - 1) + fibonacci(n - 2)
-    }
+    
     long start = time()
-    // Calculate fibonacci of 35
-    int result = fibonacci(35)
-    print("Fibonacci of 35 is " + result)
+    
+    fun add(x, y) {
+        return x * 1.3 + y * 2;
+    }
+    
+    int sum = 0
+    
+    for (i = 0 to 10000*10000) {
+        sum = add(sum, i)
+    }
+    
+    print("Sum: " + sum)
+    
     long end = time()
     print("Orbit Execution took " + (end - start) + " milliseconds")
     """;

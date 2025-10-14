@@ -203,7 +203,7 @@ public class GlobalContext extends LocalContext {
             addFunction(
                     new NativeFunction(orbitClass.name(), 0, Variable.Type.CLASS) {
                         @Override
-                        public Object call(ILocalContext context, List<Object> args) {
+                        public Object call(ILocalContext context, Object[] args) {
                             try {
                                 return new OrbitObject(orbitClass, null, context.getRoot());
                             } catch (InterruptedException e) {
@@ -218,9 +218,9 @@ public class GlobalContext extends LocalContext {
                         new Pair<>(orbitClass.name(), entry.getKey()),
                         new NativeFunction(orbitClass.name(), entry.getKey(), Variable.Type.CLASS) {
                             @Override
-                            public Object call(ILocalContext context, List<Object> args) {
+                            public Object call(ILocalContext context, Object[] args) {
                                 try {
-                                    return new OrbitObject(orbitClass, args, context.getRoot());
+                                    return new OrbitObject(orbitClass, List.of(args), context.getRoot());
                                 } catch (InterruptedException e) {
                                     return null;
                                 }
@@ -242,7 +242,7 @@ public class GlobalContext extends LocalContext {
                     new HashMap<>(Map.of(
                             new Pair<>("getMessage", 0), new NativeFunction("getMessage", 0, Variable.Type.STRING) {
                                 @Override
-                                public Object call(ILocalContext context, List<Object> args) {
+                                public Object call(ILocalContext context, Object[] args) {
                                     return context.getVariable("message".hashCode()).getValue();
                                 }
                             }

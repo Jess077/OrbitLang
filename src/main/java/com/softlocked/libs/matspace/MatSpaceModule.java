@@ -16,9 +16,9 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Vector addition
         context.addFunction(new NativeFunction("vector.add", List.of(Variable.Type.LIST, Variable.Type.LIST), Variable.Type.LIST) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<Object> a = (List<Object>) args.get(0);
-                List<Object> b = (List<Object>) args.get(1);
+            public Object call(ILocalContext context, Object[] args) {
+                List<Object> a = (List<Object>) args[0];
+                List<Object> b = (List<Object>) args[1];
                 List<Object> result = new ArrayList<>();
                 for (int i = 0; i < a.size(); i++) {
                     result.add(((Number) a.get(i)).doubleValue() + ((Number) b.get(i)).doubleValue());
@@ -46,9 +46,9 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Vector subtraction
         context.addFunction(new NativeFunction("vector.sub", List.of(Variable.Type.LIST, Variable.Type.LIST), Variable.Type.LIST) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<Object> a = (List<Object>) args.get(0);
-                List<Object> b = (List<Object>) args.get(1);
+            public Object call(ILocalContext context, Object[] args) {
+                List<Object> a = (List<Object>) args[0];
+                List<Object> b = (List<Object>) args[1];
                 List<Object> result = new ArrayList<>();
                 for (int i = 0; i < a.size(); i++) {
                     result.add(((Number) a.get(i)).doubleValue() - ((Number) b.get(i)).doubleValue());
@@ -76,9 +76,9 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Vector multiplication (with a scalar)
         context.addFunction(new NativeFunction("vector.mul", List.of(Variable.Type.LIST, Variable.Type.DOUBLE), Variable.Type.LIST) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<Object> a = (List<Object>) args.get(0);
-                double b = (double) args.get(1);
+            public Object call(ILocalContext context, Object[] args) {
+                List<Object> a = (List<Object>) args[0];
+                double b = (double) args[1];
 
                 List<Object> result = new ArrayList<>();
                 for (int i = 0; i < a.size(); i++) {
@@ -110,9 +110,9 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Vector division (by a scalar)
         context.addFunction(new NativeFunction("vector.div", List.of(Variable.Type.LIST, Variable.Type.DOUBLE), Variable.Type.LIST) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<Object> a = (List<Object>) args.get(0);
-                double b = (double) args.get(1);
+            public Object call(ILocalContext context, Object[] args) {
+                List<Object> a = (List<Object>) args[0];
+                double b = (double) args[1];
 
                 List<Object> result = new ArrayList<>();
                 for (Object o : a) {
@@ -144,9 +144,9 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Vector dot product
         context.addFunction(new NativeFunction("vector.dot", List.of(Variable.Type.LIST, Variable.Type.LIST), Variable.Type.DOUBLE) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<Object> a = (List<Object>) args.get(0);
-                List<Object> b = (List<Object>) args.get(1);
+            public Object call(ILocalContext context, Object[] args) {
+                List<Object> a = (List<Object>) args[0];
+                List<Object> b = (List<Object>) args[1];
 
                 double result = 0;
                 for (int i = 0; i < a.size(); i++) {
@@ -178,9 +178,9 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Vector cross product
         context.addFunction(new NativeFunction("vector.cross", List.of(Variable.Type.LIST, Variable.Type.LIST), Variable.Type.LIST) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<Object> a = (List<Object>) args.get(0);
-                List<Object> b = (List<Object>) args.get(1);
+            public Object call(ILocalContext context, Object[] args) {
+                List<Object> a = (List<Object>) args[0];
+                List<Object> b = (List<Object>) args[1];
 
                 List<Object> result = new ArrayList<>();
                 result.add(((Number) a.get(1)).doubleValue() * ((Number) b.get(2)).doubleValue() - ((Number) a.get(2)).doubleValue() * ((Number) b.get(1)).doubleValue());
@@ -212,8 +212,8 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Vector magnitude
         context.addFunction(new NativeFunction("vector.mag", List.of(Variable.Type.LIST), Variable.Type.DOUBLE) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<Object> a = (List<Object>) args.get(0);
+            public Object call(ILocalContext context, Object[] args) {
+                List<Object> a = (List<Object>) args[0];
 
                 double result = 0;
                 for (Object o : a) {
@@ -244,8 +244,8 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Vector normalization
         context.addFunction(new NativeFunction("vector.normalize", List.of(Variable.Type.LIST), Variable.Type.LIST) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<Object> a = (List<Object>) args.get(0);
+            public Object call(ILocalContext context, Object[] args) {
+                List<Object> a = (List<Object>) args[0];
 
                 double mag = 0;
                 for (Object o : a) {
@@ -288,9 +288,9 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Matrix addition
         context.addFunction(new NativeFunction("matrix.add", List.of(Variable.Type.LIST, Variable.Type.LIST), Variable.Type.LIST) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<List<Object>> a = (List<List<Object>>) args.get(0);
-                List<List<Object>> b = (List<List<Object>>) args.get(1);
+            public Object call(ILocalContext context, Object[] args) {
+                List<List<Object>> a = (List<List<Object>>) args[0];
+                List<List<Object>> b = (List<List<Object>>) args[1];
 
                 List<List<Object>> result = new ArrayList<>();
                 for (int i = 0; i < a.size(); i++) {
@@ -330,9 +330,9 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Matrix subtraction
         context.addFunction(new NativeFunction("matrix.sub", List.of(Variable.Type.LIST, Variable.Type.LIST), Variable.Type.LIST) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<List<Object>> a = (List<List<Object>>) args.get(0);
-                List<List<Object>> b = (List<List<Object>>) args.get(1);
+            public Object call(ILocalContext context, Object[] args) {
+                List<List<Object>> a = (List<List<Object>>) args[0];
+                List<List<Object>> b = (List<List<Object>>) args[1];
 
                 List<List<Object>> result = new ArrayList<>();
                 for (int i = 0; i < a.size(); i++) {
@@ -372,9 +372,9 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Matrix scalar multiplication
         context.addFunction(new NativeFunction("matrix.mulScalar", List.of(Variable.Type.LIST, Variable.Type.DOUBLE), Variable.Type.LIST) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<List<Object>> a = (List<List<Object>>) args.get(0);
-                double b = (double) args.get(1);
+            public Object call(ILocalContext context, Object[] args) {
+                List<List<Object>> a = (List<List<Object>>) args[0];
+                double b = (double) args[1];
 
                 List<List<Object>> result = new ArrayList<>();
                 for (List<Object> objects : a) {
@@ -414,9 +414,9 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Matrix multiplication
         context.addFunction(new NativeFunction("matrix.mul", List.of(Variable.Type.LIST, Variable.Type.LIST), Variable.Type.LIST) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<List<Object>> a = (List<List<Object>>) args.get(0);
-                List<List<Object>> b = (List<List<Object>>) args.get(1);
+            public Object call(ILocalContext context, Object[] args) {
+                List<List<Object>> a = (List<List<Object>>) args[0];
+                List<List<Object>> b = (List<List<Object>>) args[1];
 
                 List<List<Object>> result = new ArrayList<>();
                 for (List<Object> objects : a) {
@@ -464,8 +464,8 @@ public class MatSpaceModule implements OrbitJavaLibrary {
         // Matrix transpose
         context.addFunction(new NativeFunction("matrix.transpose", List.of(Variable.Type.LIST), Variable.Type.LIST) {
             @Override
-            public Object call(ILocalContext context, List<Object> args) {
-                List<List<Object>> a = (List<List<Object>>) args.get(0);
+            public Object call(ILocalContext context, Object[] args) {
+                List<List<Object>> a = (List<List<Object>>) args[0];
 
                 List<List<Object>> result = new ArrayList<>();
                 for (int i = 0; i < a.get(0).size(); i++) {

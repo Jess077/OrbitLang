@@ -19,14 +19,14 @@ public class CoroutineFunction extends OrbitFunction {
     }
 
     @Override
-    public Object call(ILocalContext context, List<Object> args) throws InterruptedException {
+    public Object call(ILocalContext context, Object[] args) throws InterruptedException {
         if (context.getRoot().isMarkedForDeletion()) throw new InterruptedException("Context marked for deletion");
 
-        for (int i = 0; i < args.size(); i++) {
-            Object value = Utils.cast(args.get(i), this.args.get(i).second.getJavaClass());
-            context.addVariable(this.args.get(i).first.hashCode(), new Variable(this.args.get(i).second, value));
+        for (int i = 0; i < args.length; i++) {
+            Object value = Utils.cast(args[i], this.args[i].second.getJavaClass());
+            context.addVariable(this.args[i].first.hashCode(), new Variable(this.args[i].second, value));
         }
 
-        return new Coroutine(context, this, args);
+        return new Coroutine(context, this, List.of(args));
     }
 }

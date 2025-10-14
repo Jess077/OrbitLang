@@ -5,6 +5,7 @@ import com.softlocked.orbit.core.datatypes.Variable;
 import com.softlocked.orbit.memory.ILocalContext;
 import com.softlocked.orbit.utils.Pair;
 
+import java.util.Arrays;
 import java.util.List;
 
 public interface IFunction extends ASTNode {
@@ -12,13 +13,13 @@ public interface IFunction extends ASTNode {
 
     int getParameterCount();
 
-    List<Pair<String, Variable.Type>> getParameters();
+    Pair<String, Variable.Type>[] getParameters();
 
     Variable.Type getReturnType();
 
     boolean isNative();
 
-    Object call(ILocalContext context, List<Object> args) throws InterruptedException;
+    Object call(ILocalContext context, Object[] args) throws InterruptedException;
 
     ASTNode getBody();
 
@@ -30,7 +31,7 @@ public interface IFunction extends ASTNode {
 
     @Override
     default long getSize() {
-        return Variable.getSize(getName()) + 4 + getParameters().stream().mapToLong(p -> Variable.getSize(p.first)).sum();
+        return Variable.getSize(getName()) + 4 + Arrays.stream(getParameters()).mapToLong(p -> Variable.getSize(p.first)).sum();
     }
 
     void setID(int id);

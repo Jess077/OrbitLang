@@ -14,7 +14,7 @@ public class Consumer {
         this.body = body;
     }
 
-    public Object accept(ILocalContext context, List<Object> args) throws InterruptedException {
+    public Object accept(ILocalContext context, Object[] args) throws InterruptedException {
         if (context.getRoot().isMarkedForDeletion()) throw new InterruptedException("Context marked for deletion");
 
         if (body instanceof IFunction) {
@@ -22,7 +22,7 @@ public class Consumer {
         }
 
         if (body instanceof VariableASTNode) {
-            IFunction function = context.getFunction(((VariableASTNode) body).name(), args.size());
+            IFunction function = context.getFunction(((VariableASTNode) body).name(), args.length);
 
             if (function != null) {
                 return function.call(context, args);

@@ -21,7 +21,8 @@ public class FunctionCallASTNode implements ASTNode {
     private final List<ASTNode> args;
 
     private IFunction cachedFunction;
-    private List<Object> cachedEvaluatedArgs;
+//    private List<Object> cachedEvaluatedArgs;
+    private Object[] cachedEvaluatedArgs;
 
     private boolean hasParams = false;
 
@@ -32,9 +33,9 @@ public class FunctionCallASTNode implements ASTNode {
             if (cachedFunction == null) {
                 throw new RuntimeException("Function " + name + " with " + args.size() + " arguments not found");
             }
-            cachedEvaluatedArgs = new ArrayList<>(args.size());
+            cachedEvaluatedArgs = new Object[args.size()];
             for (int i = 0; i < args.size(); i++) {
-                cachedEvaluatedArgs.add(null);
+                cachedEvaluatedArgs[i] = null;
             }
         }
 
@@ -61,38 +62,38 @@ public class FunctionCallASTNode implements ASTNode {
             if (cachedFunction == null) {
                 throw new RuntimeException("Function " + name + " with " + args.size() + " arguments not found");
             }
-            cachedEvaluatedArgs = new ArrayList<>(args.size());
+            cachedEvaluatedArgs = new Object[args.size()];
             for (int i = 0; i < args.size(); i++) {
-                cachedEvaluatedArgs.add(null);
+                cachedEvaluatedArgs[i] = null;
             }
         }
 
         if (cachedFunction.getParameterCount() != -1) {
-            List<Pair<String, Variable.Type>> parameters = cachedFunction.getParameters();
+            Pair<String, Variable.Type>[] parameters = cachedFunction.getParameters();
 
             for (int i = 0; i < args.size(); i++) {
                 ASTNode arg = args.get(i);
 
-                Variable.Type type = parameters.get(i).second;
+                Variable.Type type = parameters[i].second;
 
                 if(type == Variable.Type.CONSUMER) {
-                    cachedEvaluatedArgs.set(i, new Consumer(arg));
+                    cachedEvaluatedArgs[i] = new Consumer(arg);
                 } else {
-                    cachedEvaluatedArgs.set(i, arg.evaluate(context));
+                    cachedEvaluatedArgs[i] = arg.evaluate(context);
                 }
             }
         } else {
             for (int i = 0; i < args.size(); i++) {
                 ASTNode arg = args.get(i);
-                cachedEvaluatedArgs.set(i, arg.evaluate(context));
+                cachedEvaluatedArgs[i] = arg.evaluate(context);
             }
         }
 
         if (cachedFunction instanceof NativeFunction) {
             // Cast argument types
             if (cachedFunction.getParameterCount() != -1) {
-                for (int i = 0; i < cachedEvaluatedArgs.size(); i++) {
-                    cachedEvaluatedArgs.set(i, Utils.cast(cachedEvaluatedArgs.get(i), cachedFunction.getParameters().get(i).second.getJavaClass()));
+                for (int i = 0; i < cachedEvaluatedArgs.length; i++) {
+                    cachedEvaluatedArgs[i] = Utils.cast(cachedEvaluatedArgs[i], cachedFunction.getParameters()[i].second.getJavaClass());
                 }
             }
 

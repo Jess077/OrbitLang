@@ -47,7 +47,7 @@ public class OrbitObject {
                     context.addVariable(field.hashCode(), fields.get(field));
                 }
 
-                constructors.get(args.size()).call(new LocalContext(context), args);
+                constructors.get(args.size()).call(new LocalContext(context), new List[]{args});
             } else {
                 throw new RuntimeException("No constructor found for " + clazz.name() + " with " + args.size() + " arguments");
             }
@@ -93,7 +93,7 @@ public class OrbitObject {
                 context.addVariable(field.hashCode(), fields.get(field));
             }
 
-            return func.call(context, args);
+            return func.call(context, new List[]{args});
         }
 
         if (clazz.superClasses() != null) {
@@ -108,7 +108,7 @@ public class OrbitObject {
                         context.addVariable(field.hashCode(), fields.get(field));
                     }
 
-                    return func.call(context, args);
+                    return func.call(context, new List[]{args});
                 }
             }
         }
@@ -184,7 +184,7 @@ public class OrbitObject {
             context.addVariable(field.hashCode(), fields.get(field));
         }
 
-        return function.call(context, args);
+        return function.call(context, new List[]{args});
     }
 
     @Override

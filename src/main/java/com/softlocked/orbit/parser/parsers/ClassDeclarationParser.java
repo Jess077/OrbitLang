@@ -149,8 +149,8 @@ public class ClassDeclarationParser implements TokenParser {
             new Pair<>("cast", 1),
             new NativeFunction("cast", List.of(Variable.Type.STRING), Variable.Type.ANY) {
                 @Override
-                public Object call(ILocalContext localContext, List<Object> args) {
-                    String type = (String) args.get(0);
+                public Object call(ILocalContext localContext, Object[] args) {
+                    String type = (String) args[0];
                     if (type.equals("string")) {
                         try {
                             StringBuilder sb = new StringBuilder();

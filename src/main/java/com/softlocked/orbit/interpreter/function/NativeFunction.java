@@ -22,7 +22,7 @@ public class NativeFunction implements IFunction {
 
     private final List<Variable.Type> args = new ArrayList<>();
 
-    List<Pair<String, Variable.Type>> cachedParams = null;
+    Pair<String, Variable.Type>[] cachedParams;
 
     public NativeFunction(String name, int argsCount, Variable.Type returnType) {
         this.name = name;
@@ -33,10 +33,11 @@ public class NativeFunction implements IFunction {
             args.add(Variable.Type.ANY);
         }
 
-        cachedParams = new ArrayList<>();
+        if (argsCount < 0) return;
+        cachedParams = new Pair[argsCount];
 
         for (int i = 0; i < args.size(); i++) {
-            cachedParams.add(new Pair<>("arg" + i, args.get(i)));
+            cachedParams[i] = new Pair<>("arg" + i, args.get(i));
         }
     }
 
@@ -46,10 +47,10 @@ public class NativeFunction implements IFunction {
         this.returnType = returnType;
         this.args.addAll(args);
 
-        cachedParams = new ArrayList<>();
+        cachedParams = new Pair[argsCount];
 
         for (int i = 0; i < args.size(); i++) {
-            cachedParams.add(new Pair<>("arg" + i, args.get(i)));
+            cachedParams[i] = new Pair<>("arg" + i, args.get(i));
         }
     }
 
@@ -69,7 +70,7 @@ public class NativeFunction implements IFunction {
     }
 
     @Override
-    public List<Pair<String, Variable.Type>> getParameters() {
+    public Pair<String, Variable.Type>[] getParameters() {
         return cachedParams;
     }
 
@@ -84,7 +85,7 @@ public class NativeFunction implements IFunction {
     }
 
     @Override
-    public Object call(ILocalContext context, java.util.List<Object> args) {
+    public Object call(ILocalContext context, Object[] args) {
         throw new UnsupportedOperationException("Native functions must be overridden to be called");
     }
 

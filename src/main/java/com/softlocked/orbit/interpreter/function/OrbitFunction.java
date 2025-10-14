@@ -20,13 +20,14 @@ public class OrbitFunction implements IFunction {
     protected final int argsCount;
     protected final Variable.Type returnType;
 
-    protected final List<Pair<String, Variable.Type>> args = new ArrayList<>();
+    protected final Pair<String, Variable.Type>[] args;
 
     protected final ASTNode body;
 
     public OrbitFunction(String name, ASTNode body, Variable.Type returnType) {
         this.name = name;
         this.argsCount = 0;
+        this.args = new Pair[0];
         this.body = body;
         this.returnType = returnType;
     }
@@ -34,7 +35,10 @@ public class OrbitFunction implements IFunction {
     public OrbitFunction(String name, int argsCount, List<Pair<String, Variable.Type>> args, ASTNode body, Variable.Type returnType) {
         this.name = name;
         this.argsCount = argsCount;
-        this.args.addAll(args);
+        this.args = new Pair[argsCount];
+        for (int i = 0; i < argsCount; i++) {
+            this.args[i] = args.get(i);
+        }
         this.body = body;
         this.returnType = returnType;
     }
@@ -50,7 +54,7 @@ public class OrbitFunction implements IFunction {
     }
 
     @Override
-    public List<Pair<String, Variable.Type>> getParameters() {
+    public Pair<String, Variable.Type>[] getParameters() {
         return args;
     }
 
@@ -70,10 +74,10 @@ public class OrbitFunction implements IFunction {
     }
 
     @Override
-    public Object call(ILocalContext context, List<Object> args) throws InterruptedException {
-        for (int i = 0; i < args.size(); i++) {
-            Object value = Utils.cast(args.get(i), this.args.get(i).second.getJavaClass());
-            context.addVariable(this.args.get(i).first.hashCode(), new Variable(this.args.get(i).second, value));
+    public Object call(ILocalContext context, Object[] args) throws InterruptedException {
+        for (int i = 0; i < args.length; i++) {
+            Object value = Utils.cast(args[i], this.args[i].second.getJavaClass());
+            context.addVariable(this.args[i].first.hashCode(), new Variable(this.args[i].second, value));
         }
 
         Object result = body.evaluate(context);

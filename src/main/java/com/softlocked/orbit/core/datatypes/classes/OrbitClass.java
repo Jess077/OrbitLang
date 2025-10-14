@@ -123,7 +123,7 @@ public record OrbitClass(String name, List<OrbitClass> superClasses,
             return this;
         }
 
-        public ClassBuilder addFunction(String name, int arity, BiConsumer<ILocalContext, List<Object>> function) {
+        public ClassBuilder addFunction(String name, int arity, BiConsumer<ILocalContext, Object[]> function) {
             if (functions == null) {
                 functions = new HashMap<>();
             }
@@ -140,7 +140,7 @@ public record OrbitClass(String name, List<OrbitClass> superClasses,
                 }
 
                 @Override
-                public List<Pair<String, Variable.Type>> getParameters() {
+                public Pair<String, Variable.Type>[] getParameters() {
                     return null;
                 }
 
@@ -155,7 +155,7 @@ public record OrbitClass(String name, List<OrbitClass> superClasses,
                 }
 
                 @Override
-                public Object call(ILocalContext context, List<Object> args) throws InterruptedException {
+                public Object call(ILocalContext context, Object[] args) throws InterruptedException {
                     function.accept(context, args);
                     return null;
                 }
