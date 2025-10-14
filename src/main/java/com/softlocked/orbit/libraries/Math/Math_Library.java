@@ -214,5 +214,13 @@ public class Math_Library implements OrbitJavaLibrary {
                 return SimplexNoise.noise((double) args.get(0), (double) args.get(1));
             }
         });
+
+        // remainder
+        context.addFunction(new NativeFunction("math.remainder", List.of(Variable.Type.DOUBLE, Variable.Type.DOUBLE), Variable.Type.DOUBLE) {
+            @Override
+            public Object call(ILocalContext context, List<Object> args) {
+                return Math.IEEEremainder((double) args.get(0), (double) args.get(1));
+            }
+        });
     }
 }

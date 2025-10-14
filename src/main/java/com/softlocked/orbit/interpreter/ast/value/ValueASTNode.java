@@ -8,8 +8,6 @@ import com.softlocked.orbit.utils.Utils;
 public record ValueASTNode(Object value) implements ASTNode {
     @Override
     public Object evaluate(ILocalContext context) throws InterruptedException {
-        if (context.getRoot().isMarkedForDeletion()) throw new InterruptedException("Context marked for deletion");
-
         try {
             if (this.value() instanceof String) {
                 return Utils.formatString((String) this.value(), context);

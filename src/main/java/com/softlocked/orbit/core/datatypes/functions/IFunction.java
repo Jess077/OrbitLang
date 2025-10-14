@@ -12,13 +12,13 @@ public interface IFunction extends ASTNode {
 
     int getParameterCount();
 
-    List<Pair<String, Variable.Type>> getParameters();
+    Pair<Integer, Variable.Type>[] getParameters();
 
     Variable.Type getReturnType();
 
     boolean isNative();
 
-    Object call(ILocalContext context, List<Object> args) throws InterruptedException;
+    Object call(ILocalContext context, Object[] args) throws InterruptedException;
 
     ASTNode getBody();
 
@@ -30,7 +30,7 @@ public interface IFunction extends ASTNode {
 
     @Override
     default long getSize() {
-        return Variable.getSize(getName()) + 4 + getParameters().stream().mapToLong(p -> Variable.getSize(p.first)).sum();
+        return Variable.getSize(getName()) + 4 + getParameterCount() * (4 + 4) + 4;
     }
 
     void setID(int id);

@@ -8,8 +8,6 @@ import com.softlocked.orbit.utils.Utils;
 public record AssignVarASTNode(String variableName, int hash, ASTNode value) implements ASTNode {
     @Override
     public Object evaluate(ILocalContext context) throws InterruptedException {
-        if (context.getRoot().isMarkedForDeletion()) throw new InterruptedException("Context marked for deletion");
-
         Object value = this.value().evaluate(context);
 
         Variable variable = context.getVariable(hash);

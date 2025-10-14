@@ -20,7 +20,7 @@ public class OrbitFunction implements IFunction {
     protected final int argsCount;
     protected final Variable.Type returnType;
 
-    protected final List<Pair<String, Variable.Type>> args = new ArrayList<>();
+    protected final Pair<Integer, Variable.Type>[] args;
 
     protected final ASTNode body;
 
@@ -29,12 +29,17 @@ public class OrbitFunction implements IFunction {
         this.argsCount = 0;
         this.body = body;
         this.returnType = returnType;
+
+        this.args = new Pair[0];
     }
 
     public OrbitFunction(String name, int argsCount, List<Pair<String, Variable.Type>> args, ASTNode body, Variable.Type returnType) {
         this.name = name;
         this.argsCount = argsCount;
-        this.args.addAll(args);
+        this.args = new Pair[argsCount];
+        for (int i = 0; i < argsCount; i++) {
+            this.args[i] = new Pair<>(args.get(i).first.hashCode(), args.get(i).second);
+        }
         this.body = body;
         this.returnType = returnType;
     }
@@ -50,7 +55,7 @@ public class OrbitFunction implements IFunction {
     }
 
     @Override
-    public List<Pair<String, Variable.Type>> getParameters() {
+    public Pair<Integer, Variable.Type>[] getParameters() {
         return args;
     }
 
@@ -70,10 +75,11 @@ public class OrbitFunction implements IFunction {
     }
 
     @Override
-    public Object call(ILocalContext context, List<Object> args) throws InterruptedException {
-        for (int i = 0; i < args.size(); i++) {
-            Object value = Utils.cast(args.get(i), this.args.get(i).second.getJavaClass());
-            context.addVariable(this.args.get(i).first.hashCode(), new Variable(this.args.get(i).second, value));
+    public Object call(ILocalContext context, Object[] args) throws InterruptedException {
+        for (int i = 0; i < args.length; i++) {
+            Variable.Type type = this.args[i].second;
+            Object value = Utils.cast(args[i], type.getJavaClass());
+            context.addVariable(this.args[i].first, new Variable(type, value));
         }
 
         Object result = body.evaluate(context);
@@ -105,6 +111,11 @@ public class OrbitFunction implements IFunction {
 
     @Override
     public int getID() {
+        return id;
+    }
+
+    @Override
+    public int hashCode() {
         return id;
     }
 }

@@ -316,6 +316,29 @@ public class Utils {
             Collections.addAll(list, (Object[]) original);
             return list;
         }
+        else if (target.equals(Map.class)) {
+            switch (original) {
+                case OrbitObject b -> {
+                    try {
+                        Object result = b.callFunction("cast", List.of("map"));
+                        if (result instanceof Map<?, ?> map) {
+                            return map;
+                        }
+                    } catch (RuntimeException e) {
+                        // Fall through to the exception below
+                    }
+                }
+                case String string -> {
+                    Gson gson = new Gson();
+                    return gson.fromJson(string, Map.class);
+                }
+                case Map<?, ?> map -> {
+                    return map;
+                }
+                default -> {
+                }
+            }
+        }
 
         throw new RuntimeException("Cannot cast " + original.getClass().getSimpleName() + " to " + target.getSimpleName() + "!");
     }

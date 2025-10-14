@@ -42,20 +42,7 @@ public class BreakASTNode implements ASTNode {
                 IFunction func = funcCall.getCachedFunction(context);
 
                 context.getRoot().freeFunctionContext(func);
-
-                return funcCall.evaluate(context);
             }
-//            if(value instanceof OperationASTNode op) {
-//                FunctionCallASTNode funcCall = findTailCall(op);
-//                if(funcCall != null) {
-//                    System.out.println("Optimizing tail call for function: " + funcCall);
-//                    IFunction func = funcCall.getCachedFunction(context);
-//
-//                    context.getRoot().freeFunctionContext(func);
-//
-//                    return funcCall.evaluate(context);
-//                }
-//            }
         }
 
         // Evaluate value if not null

@@ -37,11 +37,7 @@ public class Variable {
     }
 
     public void setValue(Object value) {
-        if(this.value instanceof Variable var) {
-            var.setValue(value);
-        } else {
-            this.value = value;
-        }
+        this.value = value;
     }
 
     public void setType(Variable.Type type) {

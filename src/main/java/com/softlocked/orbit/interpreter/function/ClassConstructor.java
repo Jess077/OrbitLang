@@ -83,4 +83,9 @@ public class ClassConstructor implements IFunction {
     public int getID() {
         return id;
     }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }

@@ -72,7 +72,7 @@ public class Lexer {
                             }
                         }
                     }
-                    case "*", "%", "!", "=", ">", "<" -> {
+                    case "*", "%", "/", "!", "=", ">", "<" -> {
                         if (i + 1 < tokens.size()) {
                             String nextToken = tokens.get(i + 1);
 

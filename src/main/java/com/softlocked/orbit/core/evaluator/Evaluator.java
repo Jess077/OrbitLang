@@ -94,9 +94,9 @@ public class Evaluator {
         modOps.put(Double.class, (a, b) -> ((Number)a).doubleValue() % ((Number)b).doubleValue());
 
         powOps.put(Integer.class, (a, b) -> (int)Math.pow(((Number)a).intValue(), ((Number)b).intValue()));
-        powOps.put(Float.class, (a, b) -> (float)Math.pow((float)a, (float)b));
-        powOps.put(Long.class, (a, b) -> (long)Math.pow((long)a, (long)b));
-        powOps.put(Double.class, (a, b) -> Math.pow((double)a, (double)b));
+        powOps.put(Float.class, (a, b) -> (float)Math.pow(((Number)a).floatValue(), ((Number)b).floatValue()));
+        powOps.put(Long.class, (a, b) -> (long)Math.pow(((Number)a).longValue(), ((Number)b).longValue()));
+        powOps.put(Double.class, (a, b) -> Math.pow(((Number)a).doubleValue(), ((Number)b).doubleValue()));
 
         eqOps.put(Integer.class, (a, b) -> ((Number)a).intValue() == ((Number)b).intValue());
         eqOps.put(Float.class, (a, b) -> ((Number)a).floatValue() == ((Number)b).floatValue());

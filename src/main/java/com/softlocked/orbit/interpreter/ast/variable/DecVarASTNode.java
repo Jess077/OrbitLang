@@ -12,14 +12,6 @@ public record DecVarASTNode(String variableName, int hash, ASTNode value, Variab
 
         Object value = this.value().evaluate(context);
 
-        Variable old = context.getVariable(hash);
-
-        if (old != null) {
-            old.setValue(Utils.cast(value, old.getType().getJavaClass()));
-            old.setType(this.type());
-            return old;
-        }
-
         Object casted = Utils.cast(value, this.type().getJavaClass());
 
         Variable variable = new Variable(this.type(), casted);

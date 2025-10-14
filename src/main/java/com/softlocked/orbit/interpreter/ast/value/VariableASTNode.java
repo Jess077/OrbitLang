@@ -7,8 +7,6 @@ import com.softlocked.orbit.memory.ILocalContext;
 public record VariableASTNode(String name, int hash) implements ASTNode {
     @Override
     public Object evaluate(ILocalContext context) throws InterruptedException {
-        if (context.getRoot().isMarkedForDeletion()) throw new InterruptedException("Context marked for deletion");
-
         Variable variable = context.getVariable(hash);
 
         if (variable == null) {

@@ -21,7 +21,6 @@ public class BodyASTNode implements ASTNode {
 
     @Override
     public Object evaluate(ILocalContext context) throws InterruptedException {
-        if (context.getRoot().isMarkedForDeletion()) throw new InterruptedException("Context marked for deletion");
         for (ASTNode node : statements) {
             Object result = node.evaluate(context);
 

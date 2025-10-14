@@ -9,8 +9,6 @@ public record OperationASTNode(ASTNode left, ASTNode right, OperationType type) 
 
     @Override
     public Object evaluate(ILocalContext context) throws InterruptedException {
-        if (context.getRoot().isMarkedForDeletion()) throw new InterruptedException("Context marked for deletion");
-
         Object left = this.left().evaluate(context);
 
         switch (this.type()) {
@@ -105,17 +103,13 @@ public record OperationASTNode(ASTNode left, ASTNode right, OperationType type) 
     }
 
     public static boolean toBool(Object o) {
-        if (o instanceof Boolean bool) {
-            return bool;
-        } else if (o instanceof Number num) {
-            return num.longValue() != 0;
-        } else if (o instanceof String str) {
-            return !str.isEmpty();
-        } else if (o instanceof Character ch) {
-            return ch != 0;
-        } else {
-            return o != null;
-        }
+        return switch (o) {
+            case Boolean bool -> bool;
+            case Number num -> num.longValue() != 0;
+            case String str -> !str.isEmpty();
+            case Character ch -> ch != 0;
+            case null, default -> o != null;
+        };
     }
 
     @Override

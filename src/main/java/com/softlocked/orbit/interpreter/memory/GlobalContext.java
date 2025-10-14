@@ -141,6 +141,20 @@ public class GlobalContext extends LocalContext {
         builtInLibraries.add(new Input_Library());
 
         builtInLibraries.add(new Coroutine_Library());
+
+        Thread gcThread = new Thread(() -> {
+            while (true) {
+                try {
+                    // sleep for 3 seconds
+                    Thread.sleep(3000);
+
+                } catch (InterruptedException e) {
+                    return;
+                }
+
+                System.gc();
+            }
+        });
     }
 
     public static Class<?> getPrimitiveType(String name) {
@@ -164,13 +178,12 @@ public class GlobalContext extends LocalContext {
         return func;
     }
 
+    int functionIDCounter = 0;
     @Override
     public void addFunction(IFunction function) {
-        functions.put(new Pair<>(function.getName(), function.getParameterCount()), function);
+        function.setID(functionIDCounter++);
 
-        easyAccessFunctions.put(
-                easyAccessFunctions.size(), function
-        );
+        functions.put(new Pair<>(function.getName(), function.getParameterCount()), function);
 
         if(function instanceof NativeFunction nativeFunction) {
             Class<? extends BFunction> bakedFunction = nativeFunction.getBakedFunction();
@@ -195,6 +208,10 @@ public class GlobalContext extends LocalContext {
 
     public void removeClass(String name) {
         classes.remove(name);
+    }
+
+    public GlobalContext getRoot() {
+        return this;
     }
 
     public void addClass(OrbitClass orbitClass) {
@@ -235,6 +252,7 @@ public class GlobalContext extends LocalContext {
         }
     }
 
+    private String projectPath;
     public GlobalContext() {
         try {
             addClass(new OrbitClass(
@@ -264,8 +282,16 @@ public class GlobalContext extends LocalContext {
         }
     }
 
-    public void importFile(String path) throws IOException, ParsingException {
-        byte[] file = Files.readAllBytes(Paths.get(path));
+    public void setProjectPath(String path) {
+        this.projectPath = path;
+    }
+
+    public String getProjectPath() {
+        return projectPath;
+    }
+
+    public void importFile(String path) throws IOException, ParsingException, InterruptedException {
+        byte[] file = Files.readAllBytes(Paths.get(projectPath + File.separator + path));
         String code = new String(file);
 
         List<String> tokens = new Lexer(code).tokenize();
@@ -275,55 +301,55 @@ public class GlobalContext extends LocalContext {
         importModule(ast, new File(path).getParent());
     }
 
-    public void importModule(ASTNode ast, String path) {
-//        if(ast instanceof ImportASTNode) {
-//            if(ast instanceof ImportFileASTNode importFileASTNode) {
-//                if(importedFiles.contains(path + File.separator + importFileASTNode.fileName())) {
-//                    return;
-//                }
-//
-//                importedFiles.add(path + File.separator + importFileASTNode.fileName());
-//
-//                importFileASTNode.importFile(this, path);
-//            }
-//            else if(ast instanceof ImportModuleASTNode importModuleASTNode) {
-//                if(importedModules.contains(importModuleASTNode.moduleName())) {
-//                    return;
-//                }
-//
-//                importedModules.add(importModuleASTNode.moduleName());
-//
-//                importModuleASTNode.importFile(this, path);
-//            }
-//        }
-//        else if(ast instanceof BodyASTNode body) {
-//            for(ASTNode node : body.statements()) {
-//                if(node instanceof ImportASTNode) {
-//                    if(node instanceof ImportFileASTNode importFileASTNode) {
-//                        if(importedFiles.contains(path + File.separator + importFileASTNode.fileName())) {
-//                            return;
-//                        }
-//
-//                        importedFiles.add(path + File.separator + importFileASTNode.fileName());
-//
-//                        importFileASTNode.importFile(this, path);
-//                    }
-//                    else if(node instanceof ImportModuleASTNode importModuleASTNode) {
-//                        if(importedModules.contains(importModuleASTNode.moduleName())) {
-//                            return;
-//                        }
-//
-//                        importedModules.add(importModuleASTNode.moduleName());
-//
-//                        importModuleASTNode.importFile(this, path);
-//                    }
-//                }
-//                else {
-//                    node.evaluate(this);
-//                }
-//            }
-//        } else {
-//            ast.evaluate(this);
-//        }
+    public void importModule(ASTNode ast, String path) throws InterruptedException {
+        if(ast instanceof ImportASTNode) {
+            if(ast instanceof ImportFileASTNode importFileASTNode) {
+                if(importedFiles.contains(path + File.separator + importFileASTNode.fileName())) {
+                    return;
+                }
+
+                importedFiles.add(path + File.separator + importFileASTNode.fileName());
+
+                importFileASTNode.importFile(this, path);
+            }
+            else if(ast instanceof ImportModuleASTNode importModuleASTNode) {
+                if(importedModules.contains(importModuleASTNode.moduleName())) {
+                    return;
+                }
+
+                importedModules.add(importModuleASTNode.moduleName());
+
+                importModuleASTNode.importFile(this, path);
+            }
+        }
+        else if(ast instanceof BodyASTNode body) {
+            for(ASTNode node : body.statements()) {
+                if(node instanceof ImportASTNode) {
+                    if(node instanceof ImportFileASTNode importFileASTNode) {
+                        if(importedFiles.contains(path + File.separator + importFileASTNode.fileName())) {
+                            return;
+                        }
+
+                        importedFiles.add(path + File.separator + importFileASTNode.fileName());
+
+                        importFileASTNode.importFile(this, path);
+                    }
+                    else if(node instanceof ImportModuleASTNode importModuleASTNode) {
+                        if(importedModules.contains(importModuleASTNode.moduleName())) {
+                            return;
+                        }
+
+                        importedModules.add(importModuleASTNode.moduleName());
+
+                        importModuleASTNode.importFile(this, path);
+                    }
+                }
+                else {
+                    node.evaluate(this);
+                }
+            }
+        } else {
+            ast.evaluate(this);
+        }
     }
 }
