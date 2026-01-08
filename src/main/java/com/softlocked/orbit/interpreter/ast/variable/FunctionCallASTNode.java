@@ -69,7 +69,7 @@ public class FunctionCallASTNode implements ASTNode {
         }
 
         if (cachedFunction.getParameterCount() != -1) {
-            Pair<String, Variable.Type>[] parameters = cachedFunction.getParameters();
+            Pair<Integer, Variable.Type>[] parameters = cachedFunction.getParameters();
 
             for (int i = 0; i < args.size(); i++) {
                 ASTNode arg = args.get(i);

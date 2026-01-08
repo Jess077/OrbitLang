@@ -13,9 +13,10 @@ import java.util.List;
 
 public class ClassConstructor implements IFunction {
     private final int argsCount;
-    private final Pair<String, Variable.Type>[] args;
+    private final Pair<Integer, Variable.Type>[] args;
 
     private final ASTNode body;
+
 
     @Override
     public String getName() {
@@ -28,7 +29,7 @@ public class ClassConstructor implements IFunction {
     }
 
     @Override
-    public Pair<String, Variable.Type>[] getParameters() {
+    public Pair<Integer, Variable.Type>[] getParameters() {
         return args;
     }
 
@@ -51,7 +52,7 @@ public class ClassConstructor implements IFunction {
         this.argsCount = argsCount;
         this.args = new Pair[argsCount];
         for (int i = 0; i < argsCount; i++) {
-            this.args[i] = args.get(i);
+            this.args[i] = new Pair<>(args.get(i).first.hashCode(), args.get(i).second);
         }
         this.body = body;
     }
@@ -62,7 +63,7 @@ public class ClassConstructor implements IFunction {
 
         for (int i = 0; i < args.length; i++) {
             Object value = Utils.cast(args[i], this.args[i].second.getJavaClass());
-            context.addVariable(this.args[i].first.hashCode(), new Variable(this.args[i].second, value));
+            context.addVariable(this.args[i].first, new Variable(this.args[i].second, value));
         }
 
         Object result = body.evaluate(context);

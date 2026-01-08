@@ -6,6 +6,8 @@ import com.softlocked.orbit.core.datatypes.classes.OrbitClass;
 import com.softlocked.orbit.core.datatypes.classes.OrbitObject;
 import com.softlocked.orbit.core.datatypes.functions.IFunction;
 import com.softlocked.orbit.core.exception.ParsingException;
+import com.softlocked.orbit.interpreter.ast.generic.BodyASTNode;
+import com.softlocked.orbit.interpreter.ast.generic.ImportASTNode;
 import com.softlocked.orbit.interpreter.ast.value.VariableASTNode;
 import com.softlocked.orbit.interpreter.ast.variable.AssignVarASTNode;
 import com.softlocked.orbit.interpreter.function.BFunction;
@@ -19,6 +21,8 @@ import com.softlocked.orbit.libraries.*;
 import com.softlocked.orbit.libraries.Math.Math_Library;
 import com.softlocked.orbit.memory.ILocalContext;
 import com.softlocked.orbit.memory.LocalContext;
+import com.softlocked.orbit.opm.ast.pkg.ImportFileASTNode;
+import com.softlocked.orbit.opm.ast.pkg.ImportModuleASTNode;
 import com.softlocked.orbit.parser.Parser;
 import com.softlocked.orbit.utils.Pair;
 import com.softlocked.orbit.utils.list.CacheList;
@@ -29,7 +33,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The global context used to store global variables, functions, and classes.
@@ -50,19 +53,14 @@ public class GlobalContext extends LocalContext {
 
     private static final List<OrbitJavaLibrary> builtInLibraries = new ArrayList<>();
 
-    private final AtomicBoolean markedForDeletion = new AtomicBoolean(false);
     private boolean forceExit = false;
 
     public boolean isMarkedForDeletion() {
-        return markedForDeletion.get();
+        return false;
     }
 
     public boolean isForcedExit() {
         return forceExit;
-    }
-
-    public void markForDeletion() {
-        markedForDeletion.set(true);
     }
 
     private final HashMap<IFunction, CacheList<LocalContext>> functionContexts = new HashMap<>();
@@ -88,14 +86,6 @@ public class GlobalContext extends LocalContext {
 
         if(contexts != null) {
             contexts.move(-1);
-        }
-    }
-
-    public void markForDeletion(boolean forceExit) {
-        markedForDeletion.set(true);
-
-        if(forceExit) {
-            this.forceExit = true;
         }
     }
 

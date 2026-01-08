@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A linked list implementation that stores its elements permanently in memory.
+ * An array list implementation that stores its elements permanently in memory.
  * Basically has a 'movable cursor'
  */
 public class CacheList<T> extends AbstractList<T> {

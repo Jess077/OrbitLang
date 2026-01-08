@@ -82,6 +82,14 @@ public class Evaluator {
         mulOps.put(Float.class, (a, b) -> ((Number)a).floatValue() * ((Number)b).floatValue());
         mulOps.put(Long.class, (a, b) -> ((Number)a).longValue() * ((Number)b).longValue());
         mulOps.put(Double.class, (a, b) -> ((Number)a).doubleValue() * ((Number)b).doubleValue());
+        mulOps.put(String.class, (a, b) -> {
+            StringBuilder sb = new StringBuilder();
+            int times = ((Number)b).intValue();
+            for(int i = 0; i < times; i++) {
+                sb.append(a.toString());
+            }
+            return sb.toString();
+        });
 
         divOps.put(Integer.class, (a, b) -> ((Number)a).intValue() / ((Number)b).intValue());
         divOps.put(Float.class, (a, b) -> ((Number)a).floatValue() / ((Number)b).floatValue());

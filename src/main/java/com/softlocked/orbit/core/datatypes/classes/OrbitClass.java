@@ -7,7 +7,6 @@ import com.softlocked.orbit.interpreter.ast.value.ValueASTNode;
 import com.softlocked.orbit.interpreter.function.ClassConstructor;
 import com.softlocked.orbit.interpreter.memory.GlobalContext;
 import com.softlocked.orbit.memory.ILocalContext;
-import com.softlocked.orbit.memory.LocalContext;
 import com.softlocked.orbit.utils.Pair;
 
 import java.util.*;
@@ -140,7 +139,7 @@ public record OrbitClass(String name, List<OrbitClass> superClasses,
                 }
 
                 @Override
-                public Pair<String, Variable.Type>[] getParameters() {
+                public Pair<Integer, Variable.Type>[] getParameters() {
                     return null;
                 }
 

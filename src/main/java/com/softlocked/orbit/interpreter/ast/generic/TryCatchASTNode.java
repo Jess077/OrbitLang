@@ -13,8 +13,6 @@ import java.util.List;
 public record TryCatchASTNode(ASTNode tryBlock, ASTNode catchBlock, String exceptionName) implements ASTNode {
     @Override
     public Object evaluate(ILocalContext context) throws InterruptedException {
-        if (context.getRoot().isMarkedForDeletion()) throw new InterruptedException("Context marked for deletion");
-
         try {
             Object result = tryBlock.evaluate(context);
             if (result instanceof Breakpoint breakpoint && breakpoint.getType() != Breakpoint.Type.YIELD) {

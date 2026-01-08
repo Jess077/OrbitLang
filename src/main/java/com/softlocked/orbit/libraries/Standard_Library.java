@@ -191,7 +191,6 @@ public class Standard_Library implements OrbitJavaLibrary {
         context.addFunction(new NativeFunction("exit", 0, Variable.Type.VOID) {
             @Override
             public Object call(ILocalContext context, Object[] args) {
-                context.getRoot().markForDeletion(true);
                 return null;
             }
         });

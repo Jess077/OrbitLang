@@ -52,7 +52,7 @@ public class Main {
         Globals globals = JsePlatform.standardGlobals();
         LuaValue chunk = globals.load(luaCode);
 
-        for(int i = 0; i < 6; i++) {
+        for(int i = 0; i < 1; i++) {
             long startTime = System.currentTimeMillis();
             //context = new GlobalContext();
             ast.evaluate(context);

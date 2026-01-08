@@ -20,18 +20,13 @@ public class OrbitFunction implements IFunction {
     protected final int argsCount;
     protected final Variable.Type returnType;
 
-<<<<<<< HEAD
     protected final Pair<Integer, Variable.Type>[] args;
-=======
-    protected final Pair<String, Variable.Type>[] args;
->>>>>>> pr/1
 
     protected final ASTNode body;
 
     public OrbitFunction(String name, ASTNode body, Variable.Type returnType) {
         this.name = name;
         this.argsCount = 0;
-        this.args = new Pair[0];
         this.body = body;
         this.returnType = returnType;
 
@@ -43,11 +38,7 @@ public class OrbitFunction implements IFunction {
         this.argsCount = argsCount;
         this.args = new Pair[argsCount];
         for (int i = 0; i < argsCount; i++) {
-<<<<<<< HEAD
             this.args[i] = new Pair<>(args.get(i).first.hashCode(), args.get(i).second);
-=======
-            this.args[i] = args.get(i);
->>>>>>> pr/1
         }
         this.body = body;
         this.returnType = returnType;
@@ -64,11 +55,7 @@ public class OrbitFunction implements IFunction {
     }
 
     @Override
-<<<<<<< HEAD
     public Pair<Integer, Variable.Type>[] getParameters() {
-=======
-    public Pair<String, Variable.Type>[] getParameters() {
->>>>>>> pr/1
         return args;
     }
 
@@ -90,14 +77,9 @@ public class OrbitFunction implements IFunction {
     @Override
     public Object call(ILocalContext context, Object[] args) throws InterruptedException {
         for (int i = 0; i < args.length; i++) {
-<<<<<<< HEAD
             Variable.Type type = this.args[i].second;
             Object value = Utils.cast(args[i], type.getJavaClass());
             context.addVariable(this.args[i].first, new Variable(type, value));
-=======
-            Object value = Utils.cast(args[i], this.args[i].second.getJavaClass());
-            context.addVariable(this.args[i].first.hashCode(), new Variable(this.args[i].second, value));
->>>>>>> pr/1
         }
 
         Object result = body.evaluate(context);
